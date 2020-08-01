@@ -13,33 +13,33 @@ import { BrowserRouter, HashRouter } from 'react-router-dom';
 const sagaMiddleware = createSagaMiddleware();
 
 const enhancer =
-  process.env.NODE_ENV === 'production'
-    ? compose(applyMiddleware(sagaMiddleware)) // production 모드 일때는 리덕스데브 노출안함
-    : compose(
-        // production 모드가 아닐때 리덕스데브툴 노출
-        applyMiddleware(sagaMiddleware),
-        typeof window !== 'undefined' &&
-          window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined'
-          ? window.__REDUX_DEVTOOLS_EXTENSION__()
-          : (f) => f
-      );
+	process.env.NODE_ENV === 'production'
+		? compose(applyMiddleware(sagaMiddleware)) // production 모드 일때는 리덕스데브 노출안함
+		: compose(
+				// production 모드가 아닐때 리덕스데브툴 노출
+				applyMiddleware(sagaMiddleware),
+				typeof window !== 'undefined' &&
+					window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined'
+					? window.__REDUX_DEVTOOLS_EXTENSION__()
+					: (f) => f
+		  );
 
 const store = createStore(
-  reducer,
-  enhancer
-  // reducer ? action이 디스패치될때 스테이트를 어떻게 바꿔야할지 정의해두것
-  // state + reducer => store
+	reducer,
+	enhancer
+	// reducer ? action이 디스패치될때 스테이트를 어떻게 바꿔야할지 정의해두것
+	// state + reducer => store
 );
 console.log('store.getState:', store.getState());
 
 ReactDOM.render(
-  // 자식 컴포넌트들이 리덕스 스테이트에 접근 가능해진다
-  <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>,
-  document.querySelector('#root')
+	// 자식 컴포넌트들이 리덕스 스테이트에 접근 가능해진다
+	<Provider store={store}>
+		<BrowserRouter>
+			<App />
+		</BrowserRouter>
+	</Provider>,
+	document.querySelector('#root')
 );
 
 sagaMiddleware.run(rootSaga);
